@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>Zipcode Lookup</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.0/jquery.js"></script>
+  <style>
+  input, label, select {
+    display: block;
+    width: 100%;
+    margin: 0;
+    width: 150px;
+  }
+  body {
+    background-color: #add8e6;
+  }
+  </style>
+
+</head>
+<body>
+<p>Enter your zipcode </p>
+
+<form>
+  <label for="customerId">Customer Id </label>
+  <input id="CustomerId" name="customerId"/>
+  <label for="zip">Zip:</label>
+  <input id="zip" name="zip"/>
+  <label for="search">Search Nearest Copart Facility:</label>
+  <button id="search" name="Search"> </button>
+  </form>
+
+<script>
+$(document).ready(function(){
+//when the user clicks off of the zip field:
+$('#search').keypress(function(){
+  if($(this).val().length == 5){
+  var zip = $(this).val();
+  var city = '';
+  var state = '';
+  //make a request to the google api
+
+  
+ $.getJSON('http://maps.googleapis.com/maps/api/distancematrix/json?origins='+zip+'&destinations='+copartZip+'&mode=driving &sensor=false')
+ .success(function(response){
+   
+Algorithm 1 - 	 
+	 
+   Find distance between users zip code and copart location by using above api. 
+   
+   Calculate the minimum distance between them.
+	 
+   Display the nearest copart location.
+   
+   //This algorithm has complexity of n(K) where n is no of copart facilities and K is no of user inputs.
+   //so to lessen this complexity, following approach could be implemented
+   
+Algorithm 2-    
+   Find the city of user's zipcode
+   
+   Retrieve that city's zipcodes and calculate the distance with the user's zip code
+   
+   Display the nearest copart facility
+   
+    //display the city and state
+    var cities = response.results[0].postcode_localities;
+    if(cities) {
+      //get dropdown if multiple cities
+      var $select = $(document.createElement('select'));
+      console.log(cities);
+      $.each(cities, function(index, locality){
+        var $option = $(document.createElement('option'));
+        $option.html(locality);
+        $option.attr('value',locality);
+        if(city == locality) {
+          $option.attr('selected','selected');
+        }
+        $select.append($option);
+      });
+      $select.attr('id','city');
+      $('#city_merge').html($select);
+    } else {
+      $('#city').val(city);
+    }
+    $('#state').val(state);
+  });
+  }
+});
+});
+</script>
+
+</body>
+</html>
